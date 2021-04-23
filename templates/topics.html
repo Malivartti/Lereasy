@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block topics %}
+<h1 align="center">Правила по русскому языку</h1>
+
+<div class="album py-1 bg-light">
+        {% for item in form %}
+        <div class="block">
+            <a href="#"><img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{{item.img}}" ></a>
+            <h3 align="center">{{ item.name }}</h3>
+            <p align="right">added by {{ item.added_by }}</p>
+        </div>
+        {% endfor %}
+</div>
+
+{% endblock %}
