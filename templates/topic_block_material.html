@@ -1,0 +1,24 @@
+{% extends "topic_block.html" %}
+{% block ADmaterial %}
+
+<h1 align="center">Материал</h1>
+<form class="login_form">
+<div class="form-group">
+
+    <input type="text" class="form-control" placeholder="Название темы" name="name">
+    <input type="text" class="form-control" placeholder="Кем добавлено" name="added_by">
+
+    <form method="post" enctype="multipart/form-data">
+        <p>Обложка</p>
+        <div class="form-group">
+            <input type="file" class="form-control-file" name="img">
+        </div>
+    </form>
+
+    <textarea placeholder="Материал" name="comment" cols="50" rows="3"></textarea>
+    <br>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+
+</div>
+</form>
+{% endblock %}
