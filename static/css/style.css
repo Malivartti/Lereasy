@@ -7,3 +7,40 @@
     border-radius: 10px;
     display: inline-table;
 }
+
+.navi {
+
+    margin: 0;
+    padding: 0;
+    width: 10%;
+    background-color: #f1f1f1;
+    height: 100%;
+    overflow: auto;
+}
+.navg {
+    display: block;
+    color: #000;
+    padding: 8px 0 8px 16px;
+    text-decoration: none;
+}
+.navg a {
+    display: block;
+    color: #000;
+    padding: 8px 0 8px 16px;
+    text-decoration: none;
+}
+
+.navg a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.navg a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+}
+.mater {
+    margin-left:20%;
+    padding:1px 16px;
+    height:1000px;
+}

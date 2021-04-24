@@ -19,17 +19,19 @@
         <li class="nav-item"><a href="#" class="nav-link link-dark px-2">About the project</a></li>
     </ul>
     <div class="col-md-3 text-end">
-        <a href="#"><button type="button" class="btn btn-outline-primary me-2" >Login</button></a>
+        <a href="/login"><button type="button" class="btn btn-outline-primary me-2" >Login</button></a>
         <a href="/register"><button type="button" class="btn btn-primary">Sign-up</button></a>
     </div>
 </header>
 <!-- Begin page content -->
-<main role="main" class="container">
+
+<main class="container">
+    {% block login %}{% endblock %}
     {% block register %}{% endblock %}
 
     {% block home %}{% endblock %}
     {% block topics %}{% endblock %}
-
+    {% block topic_block %}{% endblock %}
 </main>
 </body>
 </html>

@@ -6,11 +6,15 @@
 <div class="album py-1 bg-light">
         {% for item in form %}
         <div class="block">
-            <a href="#"><img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{{item.img}}" ></a>
+            <a href="topics/{{ item.id}}"><img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{{item.img}}" ></a>
             <h3 align="center">{{ item.name }}</h3>
             <p align="right">added by {{ item.added_by }}</p>
         </div>
         {% endfor %}
+    <div class="block">
+        <a href="topics/999"><img class="bd-placeholder-img card-img-top" width="100%" height="225" src="static\img\add.png" ></a>
+        <h3 align="center">Добавить тему</h3>
+    </div>
 </div>
 
 {% endblock %}
