@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block practice %}
+<ul class="navi">
+    <li class="navg"><a class="active" href="/certain/{{ id }}">Материал</a></li>
+    <li class="navg"><a href="/practice/{{ id }}">Практика</a></li>
+</ul>
+{% if current_user.is_authenticated %}
+<div class="material">
+
+</div>
+{% else %}
+<h1 align="center">Авторизируйтесь, чтобы начать практику</h1>
+{% endif %}
+{% endblock %}

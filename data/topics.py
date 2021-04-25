@@ -12,7 +12,7 @@ class Topics(SqlAlchemyBase):
                            primary_key=True, autoincrement=True)
     title = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     content = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    img = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    img = sqlalchemy.Column(sqlalchemy.String, nullable=True, default="static/img/1.jpg")
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)
     is_private = sqlalchemy.Column(sqlalchemy.Boolean, default=True)

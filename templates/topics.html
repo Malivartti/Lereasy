@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block content %}
-<h1>Записи в блоге</h1>
+{% block topics %}
+<h1 align="center">Темы по Русскому языку</h1>
 {% if current_user.is_authenticated %}
-<a href="topic" class="btn btn-secondary">Добавить новость</a>
+<a href="topic" class="btn btn-secondary">Добавить тему</a>
 {% endif %}
 <div class="album py-1 bg-light">
     {% for item in topics%}

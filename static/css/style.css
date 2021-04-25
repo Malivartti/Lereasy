@@ -12,8 +12,17 @@
     max-width: 1270px;
 }
 
+.material {
+    box-shadow: 0 0 5px;
+    margin: 0;
+    margin-left:20%;
+    padding:1px 16px;
+    width: 1300px;
+    height:auto;
+}
 
 .navi {
+    box-shadow: 0 0 5px;
     margin: 0;
     padding: 0;
     width: 10%;
@@ -42,9 +51,4 @@
 .navg a:hover:not(.active) {
     background-color: #555;
     color: white;
-}
-.mater {
-    margin-left:20%;
-    padding:1px 16px;
-    height:1000px;
 }

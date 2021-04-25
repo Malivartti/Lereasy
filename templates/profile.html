@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block profile %}
+
+
+<h1 align="center">Профиль</h1>
+<h3>{{ current_user.email }}</h3>
+<h3>{{ current_user.name }}</h3>
+<h3>{{ current_user.about }}</h3>
+
+
+{% endblock %}

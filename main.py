@@ -73,7 +73,13 @@ def logout():
 @app.route("/")
 def home():
     db_session.global_init("db/blogs.db")
-    return render_template("home.html")
+    return render_template("home.html", title='Главная')
+
+
+#  <--------------------------------- Профиль --------------------------------->
+@app.route("/profile")
+def profile():
+    return render_template("profile.html", title='Профиль', form=current_user)
 
 
 #  <--------------------------------- Вывод  Темы --------------------------------->
@@ -82,11 +88,11 @@ def index():
     db_sess = db_session.create_session()
     if current_user.is_authenticated:
         topics = db_sess.query(Topics).filter(
-            (Topics.user == current_user) | (Topics.is_private is True))
+            (Topics.user == current_user) | (Topics.is_private is not True))
     else:
-        topics = db_sess.query(Topics).filter(Topics.is_private is True)
+        topics = db_sess.query(Topics).filter(Topics.is_private is not True)
 
-    return render_template("index.html", topics=topics)
+    return render_template("topics.html", title='Темы', topics=topics)
 
 
 #  <--------------------------------- Добавление  Темы --------------------------------->
@@ -104,7 +110,7 @@ def add_topic():
         db_sess.merge(current_user)
         db_sess.commit()
         return redirect('/topics')
-    return render_template('topic.html', title='Добавление темы', form=form)
+    return render_template('new_topic.html', title='Добавление темы', form=form)
 
 
 #  <--------------------------------- Изменение Темы --------------------------------->
@@ -128,13 +134,13 @@ def edit_topics(id):
             topics.title = form.title.data
             topics.content = form.content.data
             print(request.form.get('photo'))  # ------------------------------------>
-            topics.img = request.form.get('photo')
+            # topics.img = request.form.get('photo')
             topics.is_private = form.is_private.data
             db_sess.commit()
             return redirect('/topics')
         else:
             abort(404)
-    return render_template('topic.html', title='Редактирование темы', form=form)
+    return render_template('new_topic.html', title='Редактирование темы', form=form)
 
 
 #  <--------------------------------- Удаление Темы --------------------------------->
@@ -154,9 +160,17 @@ def topics_delete(id):
 @app.route('/certain/<int:id>')
 def certain(id):
     db_sess = db_session.create_session()
+    topic = db_sess.query(Topics).filter(Topics.id == id).first()
+    if topic:
+        return render_template('certain.html', title=topic.title, topic=topic, id=id)
+
+
+@app.route('/practice/<int:id>')
+def practice(id):
+    db_sess = db_session.create_session()
     topics = db_sess.query(Topics).filter(Topics.id == id).first()
     if topics:
-        return render_template('base.html', title=topics.title)
+        return render_template('practice.html', title=topics.title, id=id)
 
 
 if __name__ == '__main__':
