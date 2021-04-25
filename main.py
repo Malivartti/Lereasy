@@ -1,3 +1,7 @@
+import csv
+from io import BytesIO
+
+from PIL import Image
 from flask import Flask, render_template, request
 from data import db_session
 from data.users import User
@@ -157,6 +161,7 @@ def topics_delete(id):
     return redirect('/topics')
 
 
+#  <--------------------------------- Материал Темы --------------------------------->
 @app.route('/certain/<int:id>')
 def certain(id):
     db_sess = db_session.create_session()
@@ -165,12 +170,13 @@ def certain(id):
         return render_template('certain.html', title=topic.title, topic=topic, id=id)
 
 
-@app.route('/practice/<int:id>')
-def practice(id):
+#  <--------------------------------- Практика Темы --------------------------------->
+@app.route('/practice/<int:id>/<int:numb>')
+def practice(id, numb):
     db_sess = db_session.create_session()
     topics = db_sess.query(Topics).filter(Topics.id == id).first()
     if topics:
-        return render_template('practice.html', title=topics.title, id=id)
+        return render_template('practice.html', title=topics.title, id=id, numb=numb)
 
 
 if __name__ == '__main__':

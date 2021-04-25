@@ -22,11 +22,11 @@
             </p>
         {% endfor %}
     </p>
-    <p>Обложка</p>
-    <input type="file" class="form-control-file" id="photo" name="photo">
+
     <br>
 
     <p>{{ form.is_private() }} {{ form.is_private.label }}</p>
+
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
     {{message}}
 </form>
