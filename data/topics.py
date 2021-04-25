@@ -1,14 +1,24 @@
+import datetime
 import sqlalchemy
 from sqlalchemy import orm
+
 from .db_session import SqlAlchemyBase
 
 
-class Topic(SqlAlchemyBase):
+class Topics(SqlAlchemyBase):
     __tablename__ = 'topics'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
-    name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    title = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    content = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     img = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    added_by = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    score = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    created_date = sqlalchemy.Column(sqlalchemy.DateTime,
+                                     default=datetime.datetime.now)
+    is_private = sqlalchemy.Column(sqlalchemy.Boolean, default=True)
+
+    user_id = sqlalchemy.Column(sqlalchemy.Integer,
+                                sqlalchemy.ForeignKey("users.id"))
+    user = orm.relation('User')
+
+

@@ -8,8 +8,12 @@
     display: inline-table;
 }
 
-.navi {
+.container {
+    max-width: 1270px;
+}
 
+
+.navi {
     margin: 0;
     padding: 0;
     width: 10%;
