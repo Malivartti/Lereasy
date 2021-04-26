@@ -1,7 +1,3 @@
-import csv
-from io import BytesIO
-
-from PIL import Image
 from flask import Flask, render_template, request
 from data import db_session
 from data.users import User
@@ -12,9 +8,11 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from forms.user import RegisterForm
 from forms.login import LoginForm
 from forms.topic import TopicForm
+from functions import addTask, editTask, deleteTask
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+app.config['UPLOAD_FOLDER'] = '/path/to/static/img'
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -95,7 +93,6 @@ def index():
             (Topics.user == current_user) | (Topics.is_private is not True))
     else:
         topics = db_sess.query(Topics).filter(Topics.is_private is not True)
-
     return render_template("topics.html", title='Темы', topics=topics)
 
 
@@ -110,9 +107,23 @@ def add_topic():
         topic.title = form.title.data
         topic.content = form.content.data
         topic.is_private = form.is_private.data
+
+        file = request.files['file']
+        if file:
+            ct = 'static\\img\\' + file.filename
+            file.save(ct)
+            topic.img = ct
         current_user.topics.append(topic)
         db_sess.merge(current_user)
         db_sess.commit()
+
+        filet = request.files['tasks']
+        id = db_sess.query(Topics)[-1].id
+        if filet:
+            file = 'db\\' + filet.filename
+            filet.save(file)
+            addTask(file, id)
+
         return redirect('/topics')
     return render_template('new_topic.html', title='Добавление темы', form=form)
 
@@ -124,23 +135,34 @@ def edit_topics(id):
     form = TopicForm()
     if request.method == "GET":
         db_sess = db_session.create_session()
-        topics = db_sess.query(Topics).filter(Topics.id == id, Topics.user == current_user).first()
-        if topics:
-            form.title.data = topics.title
-            form.content.data = topics.content
-            form.is_private.data = topics.is_private
+        topic = db_sess.query(Topics).filter(Topics.id == id, Topics.user == current_user).first()
+        if topic:
+            form.title.data = topic.title
+            form.content.data = topic.content
+            form.is_private.data = topic.is_private
         else:
             abort(404)
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-        topics = db_sess.query(Topics).filter(Topics.id == id, Topics.user == current_user).first()
-        if topics:
-            topics.title = form.title.data
-            topics.content = form.content.data
-            print(request.form.get('photo'))  # ------------------------------------>
-            # topics.img = request.form.get('photo')
-            topics.is_private = form.is_private.data
+        topic = db_sess.query(Topics).filter(Topics.id == id, Topics.user == current_user).first()
+        if topic:
+            topic.title = form.title.data
+            topic.content = form.content.data
+
+            file = request.files['file']
+            if file:
+                nam = 'static\\img\\' + file.filename
+                file.save(nam)
+                topic.img = nam
+            topic.is_private = form.is_private.data
             db_sess.commit()
+
+            filet = request.files['tasks']
+            if filet:
+                file = 'db\\' + filet.filename
+                filet.save(file)
+                editTask(file, id)
+
             return redirect('/topics')
         else:
             abort(404)
@@ -156,6 +178,7 @@ def topics_delete(id):
     if topics:
         db_sess.delete(topics)
         db_sess.commit()
+        deleteTask(id)
     else:
         abort(404)
     return redirect('/topics')
@@ -171,12 +194,12 @@ def certain(id):
 
 
 #  <--------------------------------- Практика Темы --------------------------------->
-@app.route('/practice/<int:id>/<int:numb>')
-def practice(id, numb):
+@app.route('/practice/<int:id>')
+def practice(id):
     db_sess = db_session.create_session()
     topics = db_sess.query(Topics).filter(Topics.id == id).first()
     if topics:
-        return render_template('practice.html', title=topics.title, id=id, numb=numb)
+        return render_template('practice.html', title=topics.title, id=id)
 
 
 if __name__ == '__main__':

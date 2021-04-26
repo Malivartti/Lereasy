@@ -3,122 +3,13 @@
 {% block practice %}
 <ul class="navi">
     <li class="navg"><a class="active" href="/certain/{{ id }}">Материал</a></li>
-    <li class="navg"><a href="/practice/{{ id }}/0">Практика</a></li>
+    <li class="navg"><a href="/practice/{{ id }}">Практика</a></li>
 </ul>
 {% if current_user.is_authenticated %}
 <div class="material">
-    <div class="table2" id="ttt2">
-        <div id="head2" style="height: 30px; width: auto;">
-            <h2>Редактирование теста: вопросы и баллы за них</h2>
-        </div>
-        <div id="q" width="100%">
-            <div id="q1">
-                <div id="qtext1" class="quest_area">
-                    Текст вопроса №<b>1</b>:
-                    <br /><textarea style="width: 646px; height:60px;" name="question1"></textarea><br /><br />
-                </div>
-                <div id="qanswer1_1" class="line">
-                    Вариант ответа:
-                    <input type="text" name="answer1_1" style="width: 409px;" />
-                    &nbsp; &nbsp;Баллы:
-                    <input type="text" name="cost1_1" style="width: 30px;"/>
-                </div>
-                <div id="qanswer1_2" class="line">
-                    Вариант ответа:
-                    <input type="text" name="answer1_2" style="width: 409px;" />
-                    &nbsp; &nbsp;Баллы:
-                    <input type="text" name="cost1_2" style="width: 30px;"/>
-                </div>
-                <div id="qanswer1_3" class="line">
-                    Вариант ответа:
-                    <input type="text" name="answer1_3" style="width: 409px;" />
-                    &nbsp; &nbsp;Баллы:
-                    <input type="text" name="cost1_3" style="width: 30px;"/>
-                </div>
-            </div>
-            <div id="a1" class="line_button">
-                <input type="hidden" id="aa1" value="3" />
-                <input type="submit" style="margin:auto;height: 30px; width:208px;background-color:#f6f6f9;color:#1976d2;" value="Добавить вариант ответа" onclick="addVariant(1); document.getElementById('ttt2').style.height=document.getElementById('q').offsetHeight+84+'px';ttt2_height=document.getElementById('q').offsetHeight+84;return false;" />
-            </div>
-        </div>
-        <div id="b" class="line_button">
-            <input type="hidden" id="qn" value="1" />
-            <input type="hidden" id="lastid" name="lastid" value="1" />
-            <input type="submit" style="height: 30px; width:208px;background-color:#f6f6f9;color:#1976d2;" value="Добавить вопрос" onclick="addQue(); document.getElementById('ttt2').style.height=document.getElementById('q').offsetHeight+84+'px';ttt2_height=document.getElementById('q').offsetHeight+84;return false;" />
-        </div>
-    </div>
-    <table align="center" width="100%" border=0 id="ttt22">
-        <tr>
-            <td colspan="2" align="center" style="text-align: center;">
-                <input name="submit" type="submit" id="submit2" value="Перейти к редактированию результатов" class="button24" style="float:none;cursor:pointer;height: 38px; width:380px;margin: 10px 0px 10px 0px;display:none;" onClick="showhide2(); return false;"  />
-            </td>
-        </tr>
-    </table>
+
 </div>
 {% else %}
 <h1 align="center">Авторизируйтесь, чтобы начать практику</h1>
 {% endif %}
-<SCRIPT LANGUAGE="JavaScript">
-    var t1vis=1;
-    var t2vis=0;
-    var t3vis=0;
-    function addVariant(question)
-    {
-        var start=0;
-        var an="a"+question;
-        var aa="aa"+question;
-        var start=parseInt(document.getElementById(aa).value);
-        var div = document.createElement("div");
-        start++;
-        div.setAttribute('id', 'qanswer'+question+'_'+aa);
-        var name1="answer"+question+"_"+start;
-        var name2='cost'+question+'_'+start;
-        div.innerHTML = "Вариант ответа: <input type=\"text\" name=\"answer"+question+"_"+start+"\" style=\"width: 409px;\" />&nbsp; &nbsp; Баллы: <input type=\"text\" name=\"cost"+question+"_"+start+"\" style=\"width: 30px;\"/>";
-        div.className='line';
-        document.getElementById('q'+question).appendChild(div);
-        document.getElementById(aa).value=start;
- // Добавляем новый узел в конец списка полей
-    }
-
-    function addQue(){
-        var qq=document.getElementById('qn').value;
-        var question=qq;
-        question++;
-        var qn="qn"+question;
-        var aa="aa"+question;
-        var az="a"+question;
-        var divq = document.createElement("div");
-        divq.setAttribute('id', 'q'+question);
-        var divtext = document.createElement("div");
-        divtext.setAttribute('id', 'qtext'+question);
-        divtext.className='quest_area';
-        var diva1 = document.createElement("div");
-        diva1.setAttribute('id', 'answer'+question+'_1');
-        diva1.className='line';
-        var diva2 = document.createElement("div");
-        diva2.setAttribute('id', 'answer'+question+'_1');
-        diva2.className='line';
-        var diva3 = document.createElement("div");
-        diva3.setAttribute('id', 'answer'+question+'_1');
-        diva3.className='line';
-        var divbtn = document.createElement("div");
-        divbtn.className='line_button';
-        divtext.innerHTML = "Текст вопроса №<b>"+question+"</b><br /><textarea style=\"width: 646px; height:60px;\" name=\"question"+question+"\"></textarea><br /><br />";
-        divq.appendChild(divtext);
-        diva1.innerHTML = "Вариант ответа: <input type=\"text\" name=\"answer"+question+"_1\" style=\"width: 409px;\" />&nbsp; &nbsp; Баллы: <input type=\"text\" name=\"cost"+question+"_1\" style=\"width: 30px;\"/>";
-        divq.appendChild(diva1);
-        diva2.innerHTML = "Вариант ответа: <input type=\"text\" name=\"answer"+question+"_2\" style=\"width: 409px;\" />&nbsp; &nbsp; Баллы: <input type=\"text\" name=\"cost"+question+"_2\" style=\"width: 30px;\"/>";
-        divq.appendChild(diva2);
-        diva3.innerHTML = "Вариант ответа: <input type=\"text\" name=\"answer"+question+"_3\" style=\"width: 409px;\" />&nbsp; &nbsp; Баллы: <input type=\"text\" name=\"cost"+question+"_3\" style=\"width: 30px;\"/>";
-        divq.appendChild(diva3);
-        divbtn.innerHTML = "<input type=\"hidden\" id=\"aa"+question+"\" value=\"3\" /><input type=\"submit\" value=\"Добавить вариант ответа\" onclick=\"addVariant("+question+"); document.getElementById('ttt2').style.height=document.getElementById('q').offsetHeight+84+'px';ttt2_height=document.getElementById('q').offsetHeight+84;return false;\" style=\"height: 30px; width:208px;background-color:#f6f6f9;color:#1976d2;\" /><br /><br />";
-        document.getElementById('q').appendChild(divq);
-        document.getElementById('q').appendChild(divbtn);
-        document.getElementById('qn').value=question;
-        var lastid=document.getElementById('lastid').value;
-        lastid++;
-        document.getElementById('lastid').value=lastid;
- // Добавляем новый узел в конец списка полей
-    }
-</script>
 {% endblock %}
