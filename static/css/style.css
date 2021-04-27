@@ -16,9 +16,23 @@
     box-shadow: 0 0 5px;
     margin: 0;
     margin-left:20%;
+    width: 1300px;
+    height:auto;
+}
+
+.question {
+    box-shadow: 0 0 5px;
+    margin: 0;
     padding:1px 16px;
     width: 1300px;
     height:auto;
+}
+
+.correct {
+    border: 1px solid green
+}
+.incorrect {
+    border: 1px solid red
 }
 
 .navi {

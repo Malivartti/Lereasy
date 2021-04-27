@@ -8,6 +8,7 @@
         <li class="navg"><a href="/practice/{{ id }}">Практика</a></li>
     </ul>
 </div>
+<h1 align="center">Материал по теме: "{{ title }}"</h1>
 <div class="material">
     {% for item in topic.content.split("\r")%}
     <p>{{ item}}</p>

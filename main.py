@@ -1,3 +1,5 @@
+import json
+
 from flask import Flask, render_template, request
 from data import db_session
 from data.users import User
@@ -16,7 +18,7 @@ app.config['UPLOAD_FOLDER'] = '/path/to/static/img'
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-
+db_session.global_init("db/blogs.db")
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -74,7 +76,6 @@ def logout():
 #  <--------------------------------- Начальный экран --------------------------------->
 @app.route("/")
 def home():
-    db_session.global_init("db/blogs.db")
     return render_template("home.html", title='Главная')
 
 
@@ -189,8 +190,8 @@ def topics_delete(id):
 def certain(id):
     db_sess = db_session.create_session()
     topic = db_sess.query(Topics).filter(Topics.id == id).first()
-    if topic:
-        return render_template('certain.html', title=topic.title, topic=topic, id=id)
+
+    return render_template('material.html', title=topic.title, topic=topic, id=id)
 
 
 #  <--------------------------------- Практика Темы --------------------------------->
@@ -198,8 +199,11 @@ def certain(id):
 def practice(id):
     db_sess = db_session.create_session()
     topics = db_sess.query(Topics).filter(Topics.id == id).first()
-    if topics:
-        return render_template('practice.html', title=topics.title, id=id)
+    with open('db/tasks.json', "r") as cat_file:
+        data = json.load(cat_file).get(str(id))
+        print(data)
+
+    return render_template('practice.html', title=topics.title, id=id, form=data)
 
 
 if __name__ == '__main__':
