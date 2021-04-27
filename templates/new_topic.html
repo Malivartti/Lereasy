@@ -25,10 +25,11 @@
         {% endfor %}
     </p>
 
-    <div class="form-group">
-        <p>Задания (.csv)</p>
+        <p>Задания (.csv)
+            <img src="{{ url_for('static', filename='img/question.jpg') }}" height="20"
+            title="Оформление: номер вопроса; вопрос; варианты ответов через / ; номер ответа"></p>
         <input type="file" class="form-control-file" name="tasks">
-    </div>
+
 
     <p>{{ form.is_private() }} {{ form.is_private.label }}</p>
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>

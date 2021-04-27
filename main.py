@@ -20,12 +20,14 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 db_session.global_init("db/blogs.db")
 
+
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.query(User).get(user_id)
 
 
+#  <--------------------------------- Регистрация --------------------------------->
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
     form = RegisterForm()
@@ -51,6 +53,7 @@ def reqister():
     return render_template('register.html', title='Регистрация', form=form)
 
 
+#  <--------------------------------- Авторизация --------------------------------->
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -66,6 +69,7 @@ def login():
     return render_template('login.html', title='Авторизация', form=form)
 
 
+#  <--------------------------------- Выход из системы --------------------------------->
 @app.route('/logout')
 @login_required
 def logout():
@@ -85,19 +89,19 @@ def profile():
     return render_template("profile.html", title='Профиль', form=current_user)
 
 
-#  <--------------------------------- Вывод  Темы --------------------------------->
+#  <--------------------------------- Вывод  Тем --------------------------------->
 @app.route("/topics")
 def index():
     db_sess = db_session.create_session()
     if current_user.is_authenticated:
         topics = db_sess.query(Topics).filter(
-            (Topics.user == current_user) | (Topics.is_private is not True))
+            (Topics.user == current_user) | (Topics.is_private == 0))
     else:
-        topics = db_sess.query(Topics).filter(Topics.is_private is not True)
+        topics = db_sess.query(Topics).filter(Topics.is_private == 0)
     return render_template("topics.html", title='Темы', topics=topics)
 
 
-#  <--------------------------------- Добавление  Темы --------------------------------->
+#  <--------------------------------- Добавление Темы --------------------------------->
 @app.route('/topic', methods=['GET', 'POST'])
 @login_required
 def add_topic():
@@ -108,7 +112,7 @@ def add_topic():
         topic.title = form.title.data
         topic.content = form.content.data
         topic.is_private = form.is_private.data
-
+        #  Добавление и сохранение обложки
         file = request.files['file']
         if file:
             ct = 'static\\img\\' + file.filename
@@ -117,13 +121,13 @@ def add_topic():
         current_user.topics.append(topic)
         db_sess.merge(current_user)
         db_sess.commit()
-
+        #  Добавление теста
         filet = request.files['tasks']
         id = db_sess.query(Topics)[-1].id
         if filet:
-            file = 'db\\' + filet.filename
-            filet.save(file)
-            addTask(file, id)
+            file2 = 'db\\' + filet.filename
+            filet.save(file2)
+            addTask(file2, id)  # Добавление в файл json
 
         return redirect('/topics')
     return render_template('new_topic.html', title='Добавление темы', form=form)
@@ -137,7 +141,7 @@ def edit_topics(id):
     if request.method == "GET":
         db_sess = db_session.create_session()
         topic = db_sess.query(Topics).filter(Topics.id == id, Topics.user == current_user).first()
-        if topic:
+        if topic:  # Заполнение полей текущей информацией
             form.title.data = topic.title
             form.content.data = topic.content
             form.is_private.data = topic.is_private
@@ -149,7 +153,7 @@ def edit_topics(id):
         if topic:
             topic.title = form.title.data
             topic.content = form.content.data
-
+            #  Изменение обложки
             file = request.files['file']
             if file:
                 nam = 'static\\img\\' + file.filename
@@ -157,7 +161,7 @@ def edit_topics(id):
                 topic.img = nam
             topic.is_private = form.is_private.data
             db_sess.commit()
-
+            #  Изменение теста темы
             filet = request.files['tasks']
             if filet:
                 file = 'db\\' + filet.filename
@@ -179,13 +183,13 @@ def topics_delete(id):
     if topics:
         db_sess.delete(topics)
         db_sess.commit()
-        deleteTask(id)
+        deleteTask(id)  # Удаления теста к теме
     else:
         abort(404)
     return redirect('/topics')
 
 
-#  <--------------------------------- Материал Темы --------------------------------->
+#  <--------------------------------- Материал по Теме --------------------------------->
 @app.route('/certain/<int:id>')
 def certain(id):
     db_sess = db_session.create_session()
@@ -194,15 +198,13 @@ def certain(id):
     return render_template('material.html', title=topic.title, topic=topic, id=id)
 
 
-#  <--------------------------------- Практика Темы --------------------------------->
+#  <--------------------------------- Тест по Теме --------------------------------->
 @app.route('/practice/<int:id>')
 def practice(id):
     db_sess = db_session.create_session()
     topics = db_sess.query(Topics).filter(Topics.id == id).first()
     with open('db/tasks.json', "r") as cat_file:
         data = json.load(cat_file).get(str(id))
-        print(data)
-
     return render_template('practice.html', title=topics.title, id=id, form=data)
 
 
